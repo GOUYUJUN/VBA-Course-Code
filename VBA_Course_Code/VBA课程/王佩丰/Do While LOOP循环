@@ -1,0 +1,28 @@
+Sub test()
+
+
+
+Do While InputBox("请输入密码") <> "123"
+
+
+
+
+Loop
+
+End Sub
+
+
+
+Sub test1()
+
+
+Do
+
+
+    If InputBox("请输入密码") = "123" Then
+        Exit Do
+    End If
+
+Loop
+
+End Sub

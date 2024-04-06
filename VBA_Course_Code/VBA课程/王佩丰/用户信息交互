@@ -1,0 +1,139 @@
+'MsgBox 
+Sub test()
+
+MsgBox "你还好吗？", 4 + 32, "打招呼对话框", "C:/a.chm", 0
+
+End Sub
+
+
+Sub test1()
+Dim i As Integer
+
+i = MsgBox("你还好吗？", 4 + 32, "打招呼对话框", "C:/a.chm", 0)
+End Sub
+
+'inputBox
+Sub test()
+'使用inputbox函数
+InputBox "请输入姓名", "登陆框", "此处输入", 100, 100, "C:/a.chm", 0
+
+End Sub
+Sub test1()
+'使用inputbox方法
+Application.InputBox "请输入年龄", "登陆框", "此处输入", 100, 100, "C:/a.chm", 0, 1
+
+End Sub
+
+Sub test2()
+'inputbox返回值
+Dim i As Integer
+i = Application.InputBox("请输入年龄", "登陆框", "此处输入", 100, 100, "C:/a.chm", 0, 1)
+
+End Sub
+
+'GetFileOpenName
+
+'打开单个文件并关闭
+Sub test()
+Dim str As String
+Dim wb As Workbook
+
+str = Application.GetOpenFilename("Excel文件,*.xls*", , "请选择")
+If str <> "False" Then
+    Set wb = Workbooks.Open(str)
+
+'#######################
+'这里针对打开的WB进行操作
+'#######################
+
+    wb.Close
+End If
+
+End Sub
+
+
+
+'打开多选的文件
+Sub test1()
+Dim arr()
+Dim wb As Workbook
+On Error Resume Next '这一句上课的时候没加
+arr = Application.GetOpenFilename("Excel文件,*.xls*", , "请选择", , True)
+
+If arr(1) <> "False" Then
+    For i = LBound(arr) To UBound(arr)
+        Set wb = Workbooks.Open(arr(i))
+        
+        
+'#######################
+'这里针对打开的WB进行操作
+'#######################
+            
+        
+        wb.Close
+    Next
+
+End If
+
+End Sub
+
+
+'合并多个表格数据
+Sub test()
+Dim str As String
+Dim wb As Workbook
+Dim Sht, sht1 As Worksheet
+Dim i, j
+
+
+Set sht1 = ActiveSheet
+str = Application.GetOpenFilename
+
+If str <> "False" Then
+    Set wb = Workbooks.Open(str)
+        For Each Sht In wb.Sheets
+            Sht.Range("a1:z1").Copy sht1.Range("a1")
+            i = Sht.Range("a65536").End(xlUp).Row
+            j = sht1.Range("a65536").End(xlUp).Row
+            
+            Sht.Range("a2:z" & i).Copy sht1.Range("a" & j + 1)
+
+        Next
+        
+    wb.Close
+End If
+End Sub
+
+'Application.Dialogs
+Sub test()
+
+Application.Dialogs(5).Show
+
+
+End Sub
+
+'多文件合并
+
+Sub test()
+Dim str()
+Dim i As Integer
+Dim wb, wb1 As Workbook
+Dim sht As Worksheet
+
+On Error Resume Next '这一句上课时候没加，加上以后防止点了取消发生的错误
+Set wb1 = ActiveWorkbook
+Set sht1 = ActiveSheet
+On Error Resume Next
+str = Application.GetOpenFilename("Excel数据文件,*.xls*", , , , True)
+
+    For i = LBound(str) To UBound(str)
+        Set wb = Workbooks.Open(str(i))
+        For Each sht In wb.Sheets
+            sht.Copy after:=wb1.Sheets(wb1.Sheets.Count)
+            wb1.Sheets(wb1.Sheets.Count).Name = Split(wb.Name, ".")(0) & sht.Name
+        Next
+        wb.Close
+    Next
+
+
+End Sub

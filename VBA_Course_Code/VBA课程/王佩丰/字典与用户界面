@@ -1,0 +1,105 @@
+Sub test()
+Dim arr()
+Dim dic As New Dictionary
+
+arr = Range("a2:b13")
+
+
+For i = LBound(arr) To UBound(arr)
+    dic(arr(i, 2)) = 1
+Next
+
+
+Sheet2.ListBox1.List = dic.Keys
+
+
+End Sub
+
+
+
+
+'门店销售记录
+Dim arr()
+Dim ID As String
+Dim DJ As Long
+
+
+
+Private Sub CommandButton1_Click()
+
+
+
+If Me.ListBox1.Value <> "" And Me.ListBox2.Value <> "" And Me.ListBox3.Value <> "" And Me.TextBox1 > 0 Then
+Me.ListBox4.AddItem
+Me.ListBox4.List(Me.ListBox4.ListCount - 1, 0) = ID
+Me.ListBox4.List(Me.ListBox4.ListCount - 1, 1) = Me.ListBox1.Value
+Me.ListBox4.List(Me.ListBox4.ListCount - 1, 2) = Me.ListBox2.Value
+Me.ListBox4.List(Me.ListBox4.ListCount - 1, 3) = Me.ListBox3.Value
+Me.ListBox4.List(Me.ListBox4.ListCount - 1, 4) = Me.TextBox1.Value
+Me.ListBox4.List(Me.ListBox4.ListCount - 1, 5) = Me.TextBox1.Value * Me.Label2.Caption
+Else
+
+MsgBox "请正确选择商品"
+End If
+
+
+End Sub
+
+Private Sub ListBox1_Click()
+Dim dic
+Set dic = CreateObject("Scripting.Dictionary")
+
+For i = LBound(arr) To UBound(arr)
+    If arr(i, 2) = Me.ListBox1.Value Then
+        dic(arr(i, 3)) = 1
+    End If
+Next
+
+Me.ListBox2.List = dic.keys
+Me.ListBox3.Clear
+Me.Label2.Caption = 0
+
+End Sub
+
+Private Sub ListBox2_Click()
+
+Dim dic
+Set dic = CreateObject("Scripting.Dictionary")
+
+For i = LBound(arr) To UBound(arr)
+    If arr(i, 2) = Me.ListBox1.Value And arr(i, 3) = Me.ListBox2.Value Then
+        dic(arr(i, 4)) = 1
+    End If
+Next
+
+Me.ListBox3.List = dic.keys
+Me.Label2.Caption = 0
+
+
+End Sub
+
+Private Sub ListBox3_Click()
+
+For i = LBound(arr) To UBound(arr)
+
+    If arr(i, 2) = Me.ListBox1.Value And arr(i, 3) = Me.ListBox2.Value And arr(i, 4) = Me.ListBox3.Value Then
+        ID = arr(i, 1)
+        DJ = arr(i, 5)
+    End If
+Next
+
+Me.Label2.Caption = DJ
+
+
+End Sub
+
+Private Sub UserForm_Activate()
+Dim dic
+arr = Sheet1.Range("a2:e" & Sheet1.Range("a65536").End(xlUp).Row)
+Set dic = CreateObject("Scripting.Dictionary")
+
+For i = LBound(arr) To UBound(arr)
+    dic(arr(i, 2)) = 1
+Next
+Me.ListBox1.List = dic.keys
+End Sub

@@ -1,0 +1,367 @@
+'操作工作表
+Sub test()
+Sheet1.Select
+Sheets(1).Select
+Sheets("1月").Select
+End Sub
+
+
+
+
+Sub test1()
+
+Sheets.Add after:=Sheets(Sheets.Count)
+Sheets(Sheets.Count).Name = "新表"
+
+End Sub
+
+
+
+Sub test2()
+'建100张表，分别叫1,2,3,4.....
+For i = 1 To 100
+    Sheets.Add after:=Sheets(Sheets.Count)
+    Sheets(Sheets.Count).Name = i
+Next
+
+End Sub
+
+'建表时避免重名
+Sub xinjianbiao()
+Dim sht As Worksheet
+Dim k As Integer
+
+
+For i = 1 To 3
+    k = 0
+    For Each sht In Sheets
+        If sht.Name = Sheet1.Range("a" & i) Then
+            k = 1
+        End If
+    Next
+    
+    
+    If k = 0 Then
+        Sheets.Add after:=Sheets(Sheets.Count)
+        Sheets(Sheets.Count).Name = Sheet1.Range("a" & i)
+    End If
+
+Next
+
+
+
+End Sub
+
+
+'取表名
+Sub test()
+Dim i As Integer
+
+For i = 2 To Sheets.Count
+    Range("a" & i - 1) = Sheets(i).Name
+Next
+
+End Sub
+
+Sub test()
+Dim sht As Worksheet
+Dim i As Integer
+
+For Each sht In Worksheets
+    If sht.Name <> "部门" Then
+        i = i + 1
+        Range("a" & i) = sht.Name
+    End If
+Next
+
+End Sub
+
+
+
+
+'模板创建日程表
+Sub test()
+Dim i As Integer
+
+For i = 1 To 31
+    Sheet1.Copy after:=Sheets(Sheets.Count)
+    Sheets(Sheets.Count).Name = "5月" & i & "日"
+    Sheets(Sheets.Count).Range("e5") = "2016-5-" & i
+Next
+
+End Sub
+
+'多表汇总
+Sub test()
+Dim i As Integer
+
+For i = 2 To Sheets.Count
+    Sheet1.Range("b" & i + 8) = Sheets(i).Range("e5")
+    Sheet1.Range("c" & i + 8) = Sheets(i).Range("e6")
+    Sheet1.Range("d" & i + 8) = Sheets(i).Range("e44")
+
+Next
+End Sub
+
+'成绩表
+Sub test()
+Dim i As Integer
+Dim j As Integer
+
+
+For j = 1 To Sheets.Count
+
+    For i = 100 To 2 Step -1
+        If Sheets(j).Range("e" & i) = "男" Then
+            Sheets(j).Range("f" & i) = "先生"
+        Else
+            Sheets(j).Range("f" & i) = "女士"
+        End If
+        
+        If Sheets(j).Range("b" & i) = "理工" Then
+            Sheets(j).Range("c" & i) = "LG"
+        ElseIf Sheets(j).Range("b" & i) = "文科" Then
+            Sheets(j).Range("c" & i) = "WK"
+        Else
+            Sheets(j).Range("c" & i) = "CJ"
+        End If
+        
+        If Sheets(j).Range("d" & i) = "" Then
+            Sheets(j).Range("d" & i).EntireRow.Delete
+        End If
+    Next
+
+Next
+
+End Sub
+
+
+'删除工作表
+
+Sub test()
+Dim sht As Worksheet
+
+Application.DisplayAlerts = False
+
+For Each sht In Sheets
+
+    If sht.Name <> "绝不能删" Then
+        sht.Delete
+    End If
+Next
+
+Application.DisplayAlerts = True
+
+End Sub
+
+'表格拆分为多个文件
+Sub test()
+Dim sht As Worksheet
+
+For Each sht In Sheets
+    sht.Copy
+    ActiveWorkbook.SaveAs Filename:="d:\data\" & sht.Name & ".xlsx"
+    ActiveWorkbook.Close
+Next
+
+End Sub
+
+
+Sub test()
+Dim sht As Worksheet
+
+For Each sht In Sheets
+    sht.Copy
+    ActiveWorkbook.SaveAs Filename:="d:\data\" & sht.Name & ".xlsx"
+    ActiveWorkbook.Close
+Next
+
+End Sub
+
+
+'按列拆分多表
+Sub chaifenshuju()
+
+Dim sht As Worksheet
+Dim k, i, j As Integer
+Dim irow As Integer '这个说的是一共多少行
+Dim l As Integer
+Dim str As String '这里是第1处修改，加入一个变量，用于提取当前工作表的名字￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥
+
+str = ActiveSheet.Name '这里是第2处修改，取得当前要处理的表的名字￥￥￥￥￥￥￥￥￥￥￥￥
+
+l = InputBox("请输入你要按哪列分")
+
+
+'删除无意义的表
+Application.DisplayAlerts = False
+If Sheets.Count > 1 Then
+    For Each sht1 In Sheets
+        If sht1.Name <> str Then '这里是第3处修改，不在用“数据”这个固定的名字了，而是用之前取到的名字￥￥￥￥￥￥￥￥￥￥￥
+            sht1.Delete
+        End If
+    Next
+End If
+Application.DisplayAlerts = True '这个地方上课的时候我没改成true，请大家注意一下
+
+
+
+
+irow = Sheets(str).Range("a65536").End(xlUp).Row '这里是第4处修改，不在用“sheet1”这个固定的表名字了，而是用之前取到的名字的表￥￥￥￥￥￥￥￥￥￥￥
+'拆分表
+For i = 2 To irow
+    k = 0
+    For Each sht In Sheets
+        If sht.Name = Sheets(str).Cells(i, l) Then '这里是第5处修改，跟第四个修改一样，把原来的sheet1替换成sheets(str)￥￥￥￥￥￥￥￥￥￥￥
+            k = 1
+        End If
+    Next
+    
+    
+    If k = 0 Then
+        Sheets.Add after:=Sheets(Sheets.Count)
+        Sheets(Sheets.Count).Name = Sheets(str).Cells(i, l)   '这里是第6处修改，跟第四个修改一样，把原来的sheet1替换成sheets(str)￥￥￥￥￥￥￥￥￥￥￥
+    End If
+
+Next
+'拷贝数据   注意：第7处修改。原有的Range("a1:f" & irow)已经改为Range("a1:z" & irow)  因为数据可能会列数很多，所以写成到z列，故意多写一些。￥￥￥￥￥￥￥￥￥￥￥￥￥
+
+For j = 2 To Sheets.Count
+    Sheets(str).Range("a1:z" & irow).AutoFilter Field:=l, Criteria1:=Sheets(j).Name  '这里是第8处修改，跟第四个修改一样，把原来的sheet1替换成sheets(str)￥￥￥￥￥￥￥￥￥￥￥
+    Sheets(str).Range("a1:z" & irow).Copy Sheets(j).Range("a1")  '这里是第9处修改，跟第四个修改一样，把原来的sheet1替换成sheets(str)￥￥￥￥￥￥￥￥￥￥￥
+Next
+
+Sheets(str).Range("a1:z" & irow).AutoFilter   '这里是第10处修改，跟第四个修改一样，把原来的sheet1替换成sheets(str)￥￥￥￥￥￥￥￥￥￥￥
+
+Sheets(str).Select   '这里是第11处修改，跟第四个修改一样，把原来的sheet1替换成sheets(str)￥￥￥￥￥￥￥￥￥￥￥
+
+MsgBox "已处理完毕，牛逼不"
+
+End Sub
+
+
+
+
+'根据部门列创建工作表
+Sub chaifenshuju()
+
+
+Dim sht As Worksheet
+Dim k, i, j As Integer
+Dim irow As Integer '这个说的是一共多少行
+Dim l As Integer
+
+
+l = InputBox("请输入你要按哪列分")
+
+
+'删除无意义的表
+Application.DisplayAlerts = False
+If Sheets.Count > 1 Then
+    For Each sht1 In Sheets
+        If sht1.Name <> "数据" Then
+            sht1.Delete
+        End If
+    Next
+End If
+Application.DisplayAlerts = True '这个地方上课的时候我没改成true，请大家注意一下
+
+
+
+
+
+irow = Sheet1.Range("a65536").End(xlUp).Row
+'拆分表
+For i = 2 To irow
+    k = 0
+    For Each sht In Sheets
+        If sht.Name = Sheet1.Cells(i, l) Then
+            k = 1
+        End If
+    Next
+    
+    
+    If k = 0 Then
+        Sheets.Add after:=Sheets(Sheets.Count)
+        Sheets(Sheets.Count).Name = Sheet1.Cells(i, l)
+    End If
+
+Next
+'拷贝数据
+
+For j = 2 To Sheets.Count
+    Sheet1.Range("a1:f" & irow).AutoFilter Field:=l, Criteria1:=Sheets(j).Name
+    Sheet1.Range("a1:f" & irow).Copy Sheets(j).Range("a1")
+Next
+
+Sheet1.Range("a1:f" & irow).AutoFilter
+
+Sheet1.Select
+
+MsgBox "已处理完毕"
+
+End Sub
+
+'合并多个表的数据
+Sub hebing()
+Dim i, j As Integer   'i是数据源表的最后一行，j是目标表(数据表)的最后一行
+Dim sht As Worksheet
+
+
+'先要删除所有数据
+Sheet1.Range("a1:f65536").ClearContents
+
+'复制表头
+Sheet2.Range("a1:f1").Copy Sheet1.Range("a1")
+
+'复制数据
+For Each sht In Sheets
+    If sht.Name <> "数据" Then
+        i = sht.Range("a65536").End(xlUp).Row
+        j = Sheet1.Range("a65536").End(xlUp).Row
+        
+        sht.Range("a2:f" & i).Copy Sheet1.Range("a" & j + 1)
+    End If
+Next
+End Sub
+
+'#################################################################################################
+'隐藏任务：
+
+'因为工作中的表，表头不一定只有一行，能不能执行程序以前弹出inputbox，问一下用户表头有几行，然后再合并
+'如果表头有两行，则其他表数据要从第三行开始取
+'#################################################################################################
+
+
+'制作密码验证
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+Dim sht As Worksheet
+'隐藏所有表
+For Each sht In Sheets
+    If sht.Name <> "登录界面" Then
+        sht.Visible = xlSheetVeryHidden
+    End If
+Next
+End Sub
+
+Private Sub Workbook_Open()
+Dim i
+
+i = InputBox("请输入密码")
+
+If i = "123" Then
+    Sheet1.Visible = xlSheetVisible
+    Sheet2.Visible = xlSheetVisible
+    Sheet3.Visible = xlSheetVisible
+ElseIf i = "456" Then
+    Sheet4.Visible = xlSheetVisible
+    Sheet5.Visible = xlSheetVisible
+    Sheet6.Visible = xlSheetVisible
+Else
+    MsgBox "密码输入错误"
+    ThisWorkbook.Close
+End If
+
+
+        
+End Sub

@@ -1,0 +1,88 @@
+Option Explicit
+
+Sub demo()
+
+    Dim i As Long, j As Long, k As Long, s As String
+    Dim reg1 As Object, matches1 As Object, mch1 As Object
+    Dim reg2 As Object, matches2 As Object, mch2 As Object
+    Dim allBonus As String
+    
+    i = 6
+    s = Range("a1").Value
+    
+    Set reg1 = CreateObject("vbscript.regexp")
+    reg1.Global = True
+    reg1.Pattern = "姓名:\s*(\S+)\s*获奖情况:([^;]+);"
+    
+    Set reg2 = CreateObject("vbscript.regexp")
+    reg2.Global = True
+    reg2.Pattern = "\s*(\S+)奖(\S+)"
+    
+    Set matches1 = reg1.Execute(s)
+        
+    For Each mch1 In matches1
+        
+        Cells(i, 2) = mch1.submatches(0)
+        allBonus = Trim(mch1.submatches(1))
+        
+        Set matches2 = reg2.Execute(allBonus)
+        
+        For Each mch2 In matches2
+            
+            For k = 3 To 6
+                If Cells(5, k) = mch2.submatches(0) Then
+                    Cells(i, k) = mch2.submatches(1)
+                End If
+            Next k
+        Next mch2
+        
+        i = i + 1
+    Next mch1
+End Sub
+
+'环视
+Option Explicit
+
+Sub lookRoundDemo()
+
+    Dim reg As Object, matches As Object
+    Dim i As Long, s As String
+    
+    '从A1单元格读入待分析的原文本
+    s = Cells(1, 1)
+    '创建并设置正则表达式对象。MultiLine为True代表“多行模式”，
+    '在这种模式下，可以用$符号代表每一行的结尾。
+    Set reg = CreateObject("vbscript.regexp")
+    reg.Global = True
+    reg.MultiLine = True
+    
+    '设计正则表达式
+    
+    reg.Pattern = "\d+(?!\d|-)"
+    
+    '执行正则表达式，并将匹配出的结果依次写在A列各行
+    Set matches = reg.Execute(s)
+    For i = 0 To matches.Count - 1
+        Cells(i + 2, 1) = matches(i).Value
+    Next i
+
+End Sub
+
+Sub splitDemo()
+
+    Dim a() As String, i As Long, s
+    
+    a = Split(Range("a1").Value, "北京")
+    
+    i = 2
+    
+    For Each s In a
+    
+        If s <> "" Then
+            Cells(i, 1) = "北京" & s
+            i = i + 1
+        End If
+    
+    Next s
+
+End Sub

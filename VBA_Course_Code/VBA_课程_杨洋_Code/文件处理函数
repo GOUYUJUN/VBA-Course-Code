@@ -1,0 +1,26 @@
+Option Explicit
+
+Sub demo()
+
+    Dim i As Long, fName As String, dptPath As String, rootPath
+        
+    rootPath = "d:\vbademo\"
+    
+    For i = 2 To Range("a2").End(xlDown).Row
+        
+        fName = Cells(i, 1) & ".txt"
+        dptPath = rootPath & Cells(i, 2) & "\"
+        
+        If Dir(rootPath & fName) <> "" Then
+        
+            If Dir(dptPath, vbDirectory) = "" Then MkDir (dptPath)
+            
+            FileCopy rootPath & fName, dptPath & fName
+                
+            Kill rootPath & fName
+            
+        End If
+        
+    Next i
+    
+End Sub

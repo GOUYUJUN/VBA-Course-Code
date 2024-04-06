@@ -1,0 +1,26 @@
+Option Explicit
+
+Sub demo()
+
+    Dim i As Long, j As Long, s As Long
+    
+    For i = 3 To 24
+    
+        If Cells(i, 6) = "" Then
+            
+            s = 1
+            Cells(i, 6) = s
+            
+            For j = i + 1 To 24
+                
+                If Cells(j, 3) = Cells(i, 3) Then
+                    s = s + 1
+                    Cells(j, 6) = s
+                End If
+            Next j
+        
+        End If
+        
+    Next i
+
+End Sub

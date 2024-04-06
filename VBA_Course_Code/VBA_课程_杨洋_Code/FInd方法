@@ -1,0 +1,33 @@
+'多表FIND
+Option Explicit
+
+Sub demo()
+    
+    Dim i As Long, j As Long, name As String, meetName As String
+    Dim wAll As Worksheet, wMeet As Worksheet, r As Range
+
+    Set wAll = Worksheets("出席统计")
+    
+    i = 2
+    Do While Trim(wAll.Cells(i, 1)) <> ""
+        
+        name = Trim(wAll.Cells(i, 1))
+        
+        For j = 2 To 21
+        
+            meetName = wAll.Cells(1, j).Value
+            
+            Set wMeet = Worksheets(meetName)
+            
+            Set r = wMeet.Cells.Find(name)
+            
+            If Not r Is Nothing Then wAll.Cells(i, j) = "Yes"
+        
+        Next j
+        
+        i = i + 1
+    
+    Loop
+
+End Sub
+

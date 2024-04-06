@@ -1,0 +1,230 @@
+Sub 个税计算程序()
+    Dim i As Integer
+    For i = Range("A1").End(xlDown).Row To 2 Step -1
+        If Range("C" & i) - 3500 <= 0 Then
+            Range("D" & i) = 0
+        ElseIf Range("C" & i) - 3500 > 0 And Range("C" & i) - 3500 <= 1500 Then
+            Range("D" & i) = (Range("C" & i) - 3500) * 0.03
+        ElseIf Range("C" & i) - 3500 > 1500 And Range("C" & i) - 3500 <= 4500 Then
+             Range("D" & i) = (Range("C" & i) - 3500) * 0.1 - 105
+        ElseIf Range("C" & i) - 3500 > 4500 And Range("C" & i) - 3500 <= 9000 Then
+            Range("D" & i) = (Range("C" & i) - 3500) * 0.2 - 555
+        ElseIf Range("C" & i) - 3500 > 9000 And Range("C" & i) - 3500 <= 35000 Then
+             Range("D" & i) = (Range("C" & i) - 3500) * 0.25 - 1005
+        ElseIf Range("C" & i) - 3500 > 35000 And Range("C" & i) - 3500 <= 55000 Then
+             Range("D" & i) = (Range("C" & i) - 3500) * 0.3 - 2755
+        ElseIf Range("C" & i) - 3500 > 55000 And Range("C" & i) - 3500 <= 80000 Then
+             Range("D" & i) = (Range("C" & i) - 3500) * 0.35 - 5505
+        Else
+            Range("D" & i) = (Range("C" & i) - 3500) * 0.45 - 13505
+        End If
+    Next
+
+
+End Sub
+
+Sub 填充专业代码和称呼删空数据行()
+Dim i As Integer
+    For i = Range("A1").End(xlDown).Row To 1 Step -1 '倒着删
+        If Range("E" & i) = "男" Then '处理性别称呼
+            Range("F" & i) = "先生"
+        Else
+            Range("F" & i) = "女士"
+        End If
+        
+        If Range("B" & i) = "理工" Then '处理专业代码
+            Range("C" & i) = "LG"
+        ElseIf Range("B" & i) = "文科" Then
+            Range("C" & i) = "WK"
+        Else
+            Range("C" & i) = "CJ"
+        End If
+        
+        If Range("A" & i) = "" Or Range("B" & i) = "" Or Range("C" & i) = "" Or Range("D" & i) = "" Or Range("E" & i) = "" Or Range("F" & i) = "" Or Range("G" & i) = "" Or Range("H" & i) = "" Then
+        Range("A" & i).EntireRow.Select
+        Selection.Delete Shift:=xlUp '删空数据
+        Else
+        End If
+    Next
+End Sub
+
+
+Sub gs()
+Dim i As Integer
+For i = 2 To 12
+
+If Range("c" & i) - 3500 <= 0 Then
+    Range("d" & i) = 0
+ElseIf Range("c" & i) - 3500 > 0 And Range("c" & i) - 3500 <= 1500 Then
+    Range("d" & i) = (Range("c" & i) - 3500) * 0.03
+ElseIf Range("c" & i) - 3500 > 1500 And Range("c" & i) - 3500 <= 4500 Then
+    Range("d" & i) = (Range("c" & i) - 3500) * 0.1 - 105
+ElseIf Range("c" & i) - 3500 > 4500 And Range("c" & i) - 3500 <= 9000 Then
+    Range("d" & i) = (Range("c" & i) - 3500) * 0.2 - 555
+ElseIf Range("c" & i) - 3500 > 9000 And Range("c" & i) - 3500 <= 35000 Then
+    Range("d" & i) = (Range("c" & i) - 3500) * 0.25 - 1005
+ElseIf Range("c" & i) - 3500 > 35000 And Range("c" & i) - 3500 <= 55000 Then
+    Range("d" & i) = (Range("c" & i) - 3500) * 0.3 - 2755
+ElseIf Range("c" & i) - 3500 > 55000 And Range("c" & i) - 3500 <= 80000 Then
+    Range("d" & i) = (Range("c" & i) - 3500) * 0.35 - 5505
+Else
+    Range("d" & i) = (Range("c" & i) - 3500) * 0.45 - 13505
+End If
+
+Next
+    
+End Sub
+
+
+Sub shishi()
+Dim i As Integer
+
+
+For i = 1 To 100
+Range("a" & i) = i * 100
+Next
+
+
+
+
+End Sub
+
+
+Sub gys()
+
+Dim i As Integer
+
+
+For i = 1 To 100
+
+    Range("c" & i * 7 - 6).Select
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .ThemeColor = xlThemeColorLight2
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
+Next
+
+
+End Sub
+
+
+
+Sub pd()
+Dim i As Integer
+
+
+For i = 26 To 2 Step -1
+    '处理性别的代码
+    If Range("e" & i) = "男" Then
+        Range("f" & i) = "先生"
+    Else
+        Range("f" & i) = "女士"
+    End If
+    
+    '处理专业代号
+    If Range("b" & i) = "理工" Then
+        Range("c" & i) = "LG"
+    ElseIf Range("b" & i) = "文科" Then
+        Range("c" & i) = "WK"
+    Else
+        Range("c" & i) = "CJ"
+    End If
+        
+        
+        
+    If Range("d" & i) = "" Then
+        Range("D" & i).Select
+        Selection.EntireRow.Delete
+    End If
+        
+    
+
+Next
+
+
+End Sub
+
+
+
+Sub gzt()
+Dim i As Integer
+
+For i = 3 To 2000 Step 2
+
+    If Range("A" & i) = "" Then
+        Exit For
+    End If
+    
+    Rows("1:1").Select
+    Application.CutCopyMode = False
+    Selection.Copy
+    Range("A" & i).Select
+    Selection.Insert Shift:=xlDown
+    
+Next
+
+
+End Sub
+
+
+
+Sub gzd()
+    
+    
+    
+For i = 3 To 2000
+
+    If Range("a" & i) = "" Then
+        Exit For
+    End If
+    
+    Range("A" & i).Select
+    Application.CutCopyMode = False
+    Selection.EntireRow.Delete
+Next
+
+End Sub
+
+
+'作业_成绩表
+Sub test()
+Dim i As Integer
+Dim sht As Worksheet
+
+For Each sht In Worksheets
+    sht.Select
+    For i = 100 To 2 Step -1
+        '处理性别的代码
+        If Range("e" & i) = "男" Then
+            Range("f" & i) = "先生"
+        Else
+            Range("f" & i) = "女士"
+        End If
+        
+        '处理专业代号
+        If Range("b" & i) = "理工" Then
+            Range("c" & i) = "LG"
+        ElseIf Range("b" & i) = "文科" Then
+            Range("c" & i) = "WK"
+        Else
+            Range("c" & i) = "CJ"
+        End If
+            
+        '删除空行
+        If Range("d" & i) = "" Then
+            Range("D" & i).Select
+            Selection.EntireRow.Delete
+        End If
+    Next
+    
+    '拆分表
+    sht.Copy
+    ActiveWorkbook.SaveAs Filename:="d:\data\" & sht.Name & ".xlsx"
+    ActiveWorkbook.Close
+    
+Next
+
+End Sub

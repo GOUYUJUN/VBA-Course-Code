@@ -1,0 +1,143 @@
+'将对象赋值到变量
+Sub test()
+Dim sht As Worksheet
+
+For i = 2 To 5
+Set sht = Sheets.Add
+sht.Name = Sheet1.Range("a" & i)
+Next
+
+End Sub
+
+
+'拆分多表
+Sub chaifenshuju()
+
+
+Dim sht As Worksheet
+Dim k, i, j As Integer
+Dim irow As Integer '这个说的是一共多少行
+Dim l As Integer
+Dim sht0 As Worksheet
+
+
+
+Set sht0 = ActiveSheet
+
+l = InputBox("请输入你要按哪列分")
+
+
+'删除无意义的表
+Application.DisplayAlerts = False
+If Sheets.Count > 1 Then
+    For Each sht1 In Sheets
+        If sht1.Name <> sht0.Name Then
+            sht1.Delete
+        End If
+    Next
+End If
+Application.DisplayAlerts = True '这个地方上课的时候我没改成true，请大家注意一下
+
+
+
+
+
+irow = sht0.Range("a65536").End(xlUp).Row
+'拆分表
+For i = 2 To irow
+    k = 0
+    For Each sht In Sheets
+        If sht.Name = sht0.Cells(i, l) Then
+            k = 1
+        End If
+    Next
+    
+    
+    If k = 0 Then
+        Sheets.Add after:=Sheets(Sheets.Count)
+        Sheets(Sheets.Count).Name = sht0.Cells(i, l)
+    End If
+
+Next
+'拷贝数据
+
+For j = 2 To Sheets.Count
+    sht0.Range("a1:z" & irow).AutoFilter Field:=l, Criteria1:=Sheets(j).Name
+    sht0.Range("a1:z" & irow).Copy Sheets(j).Range("a1")
+Next
+
+sht0.Range("a1:z" & irow).AutoFilter
+
+sht0.Select
+
+MsgBox "已处理完毕，牛逼不"
+
+End Sub
+
+
+'获得所有文件名 dir函数
+Sub test()
+Dim str As String
+
+str = Dir("d:\data\*.*")
+
+For i = 1 To 100
+    Range("a" & i) = str
+    str = Dir
+    
+    
+    If str = "" Then
+        Exit For
+    End If
+Next
+
+End Sub
+
+
+
+'多文件合并1
+Sub wjhb()
+Dim str As String
+Dim wb As Workbook
+
+str = Dir("d:\data\*.xls*")
+
+For i = 1 To 100
+    Set wb = Workbooks.Open("d:\data\" & str)
+    
+    wb.Sheets(1).Copy after:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count)
+    ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count).Name = Split(wb.Name, ".")(0)
+    
+    wb.Close
+    str = Dir
+    If str = "" Then
+        Exit For
+    End If
+Next
+End Sub
+
+'多文件合并2
+Sub wjhb()
+Dim str As String
+Dim wb As Workbook
+Dim sht As Worksheet
+
+str = Dir("d:\data\*.xls*")
+
+For i = 1 To 100
+    Set wb = Workbooks.Open("d:\data\" & str)
+    For Each sht In wb.Sheets
+        sht.Copy after:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count)
+        ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count).Name = Split(wb.Name, ".")(0) & sht.Name
+    Next
+    wb.Close
+    str = Dir
+    If str = "" Then
+        Exit For
+    End If
+Next
+End Sub
+
+
+
+

@@ -1,0 +1,252 @@
+'使用工作表函数
+Sub tongji()
+Dim i, k, l, m As Integer
+
+For i = 2 To Sheets.Count
+    k = k + Application.WorksheetFunction.CountA(Sheets(i).Range("a:a")) - 1
+    l = l + Application.WorksheetFunction.CountIf(Sheets(i).Range("f:f"), "男")
+    m = m + Application.WorksheetFunction.CountIf(Sheets(i).Range("f:f"), "女")
+Next
+
+Sheet1.Range("d26") = k
+Sheet1.Range("d27") = l
+Sheet1.Range("d28") = m
+
+
+End Sub
+
+
+
+Sub chaxun()
+
+
+On Error Resume Next
+
+Sheet1.Range("d14").ClearContents
+
+For i = 2 To Sheets.Count
+    Sheet1.Range("d14") = Application.WorksheetFunction.VLookup(Sheet1.Range("d9"), Sheets(i).Range("a:h"), 5, 0)
+    Sheet1.Range("d16") = Application.WorksheetFunction.VLookup(Sheet1.Range("d9"), Sheets(i).Range("a:h"), 6, 0)
+    Sheet1.Range("d18") = Application.WorksheetFunction.VLookup(Sheet1.Range("d9"), Sheets(i).Range("a:h"), 3, 0)
+    Sheet1.Range("d20") = Application.WorksheetFunction.VLookup(Sheet1.Range("d9"), Sheets(i).Range("a:h"), 8, 0)
+    Sheet1.Range("d22") = Sheets(i).Name
+    
+    If Sheet1.Range("d14") <> "" Then
+        Exit For
+    End If
+Next
+End Sub
+
+
+'根据部门列创建工作表
+Sub chaifenshuju()
+
+
+Dim sht As Worksheet
+Dim k, i, j As Integer
+Dim irow As Integer '这个说的是一共多少行
+Dim l
+
+
+l = InputBox("请输入你要按哪列分")
+
+If IsNumeric(l) = False Or l < 1 Then
+    Exit Sub
+End If
+
+
+l = Val(l)
+
+
+'删除无意义的表
+Application.DisplayAlerts = False
+If Sheets.Count > 1 Then
+    For Each sht1 In Sheets
+        If sht1.Name <> "数据" Then
+            sht1.Delete
+        End If
+    Next
+End If
+Application.DisplayAlerts = True '这个地方上课的时候我没改成true，请大家注意一下
+
+
+
+
+
+irow = Sheet1.Range("a65536").End(xlUp).Row
+'拆分表
+For i = 2 To irow
+    k = 0
+    For Each sht In Sheets
+        If sht.Name = Sheet1.Cells(i, l) Then
+            k = 1
+        End If
+    Next
+    
+    
+    If k = 0 Then
+        Sheets.Add after:=Sheets(Sheets.Count)
+        Sheets(Sheets.Count).Name = Sheet1.Cells(i, l)
+    End If
+
+Next
+'拷贝数据
+
+For j = 2 To Sheets.Count
+    Sheet1.Range("a1:f" & irow).AutoFilter Field:=l, Criteria1:=Sheets(j).Name
+    Sheet1.Range("a1:f" & irow).Copy Sheets(j).Range("a1")
+Next
+
+Sheet1.Range("a1:f" & irow).AutoFilter
+
+Sheet1.Select
+
+MsgBox "已处理完毕，牛逼不"
+
+End Sub
+
+
+
+'VBA函数
+Sub test()
+
+Sheet1.Range("b2") = Left(Sheet1.Range("a2"), InStr(Sheet1.Range("a2"), "@") - 1)
+
+
+End Sub
+
+
+
+Sub tiqu()
+
+
+On Error Resume Next
+For i = 2 To Sheet2.Range("a65536").End(xlUp).Row
+
+    Sheet2.Range("b" & i) = Split(Sheet2.Range("a" & i), "-")(2) & "年 第" & Split(Sheet2.Range("a" & i), "-")(3) & "周"
+
+Next
+
+End Sub
+
+'计算日期
+Sub zhuanhua()
+
+
+With Sheet1
+
+    For i = 2 To .Range("a65536").End(xlUp).Row
+        .Range("b" & i) = DateSerial(Left(.Range("a" & i), 4), Mid(.Range("a" & i), 5, 2), Right(.Range("a" & i), 2))
+    Next
+End With
+
+End Sub
+
+
+Sub tiqushengri()
+
+
+With Sheet2
+
+    For i = 2 To .Range("a65536").End(xlUp).Row
+        .Range("b" & i) = DateSerial(Mid(.Range("a" & i), 7, 4), Mid(.Range("a" & i), 11, 2), Mid(.Range("a" & i), 13, 2))
+    Next
+End With
+
+
+
+End Sub
+
+
+
+'自定义函数 
+Function zmj(x)
+zmj = x / 6.03 - x * 0.03
+End Function
+
+
+Function ch(str As String)
+If str = "男" Then
+    ch = "先生"
+Else
+    ch = "女士"
+End If
+End Function
+
+
+'自定义函数  调用函数 
+Sub zhuanhua()
+
+
+With Sheet1
+
+    For i = 2 To .Range("a65536").End(xlUp).Row
+        .Range("b" & i) = rqzh(Range("a" & i))
+    Next
+End With
+
+End Sub
+
+
+Sub tiqushengri()
+
+
+With Sheet2
+
+    For i = 2 To .Range("a65536").End(xlUp).Row
+        .Range("b" & i) = rqzh(Mid(Range("a" & i), 7, 8))
+    Next
+End With
+
+
+
+End Sub
+
+
+Function rqzh(str As String)
+
+rqzh = DateSerial(Left(str, 4), Mid(str, 5, 2), Right(str, 2))
+
+
+End Function
+
+
+'工作表中调用VBA函数
+Function jqzf(str As String, str1 As String, i As Integer)
+jqzf = Split(str, str1)(i - 1)
+End Function
+
+
+
+
+'创建带参数过程
+Sub cjb(str As String)
+Dim sht As Worksheet
+
+For Each sht In Sheets
+
+    If sht.Name = str Then
+        k = 1
+    End If
+
+Next
+
+If k = 0 Then
+    Sheets.Add after:=Sheets(Sheets.Count)
+    Sheets(Sheets.Count).Name = str
+End If
+
+
+End Sub
+
+
+Sub abc1()
+Call cjb(Sheet1.Range("a1"))
+Sheet1.Select
+End Sub
+
+
+Sub abc2()
+Call cjb(Sheet2.Range("a8"))
+Sheet2.Select
+End Sub

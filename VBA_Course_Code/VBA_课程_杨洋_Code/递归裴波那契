@@ -1,0 +1,66 @@
+'递归裴波那契
+Option Explicit
+
+Sub FidDemo()
+
+    MsgBox fid(8)
+
+End Sub
+
+Function fid(n)
+
+    If n > 2 Then
+        fid = fid(n - 1) + fid(n - 2)
+    Else
+        fid = 1
+    End If
+
+End Function
+
+
+'递归求和
+Option Explicit
+
+Sub demo()
+
+    MsgBox mysum(5)
+
+End Sub
+
+Function mysum(n As Long)
+    
+    Dim s
+    
+    If n = 1 Then
+        s = 1
+    Else
+        s = n + mysum(n - 1)
+    End If
+    
+    mysum = s
+
+End Function
+
+
+
+Option Explicit
+
+Sub demo()
+
+    MsgBox mysum(5)
+
+End Sub
+
+Function mysum(n As Long)
+    
+    Dim s
+    
+    If n = 1 Then
+        s = 1
+    Else
+        s = n + mysum(n - 1)
+    End If
+    
+    mysum = s
+
+End Function

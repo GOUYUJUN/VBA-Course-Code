@@ -1,0 +1,197 @@
+'shapes大家族
+Sub test()
+Dim shp As Shape
+
+For Each shp In Sheet1.Shapes
+    i = i + 1
+    Range("a" & i) = shp.Name
+    Range("b" & i) = shp.TopLeftCell.Address
+    Range("c" & i) = shp.Type
+
+Next
+
+
+End Sub
+
+
+'按位置插入并调整图片
+Sub test()
+On Error Resume Next
+Dim shp, shp1 As Shape
+
+For Each shp1 In Sheet1.Shapes
+    shp1.Delete
+Next
+
+For i = 2 To 12
+Set shp = Sheet1.Shapes.AddPicture("d:\data\" & Range("a" & i) & ".jpg", msoFalse, msoCTrue, Range("d" & i).Left, Range("d" & i).Top, Range("d" & i).Width, Range("d" & i).Height)
+shp.Placement = xlMoveAndSize
+Next
+
+End Sub
+
+'改文件名
+Sub test()
+Dim i As Integer
+
+On Error Resume Next
+
+For i = 2 To 12
+Name "d:\data\" & Range("a" & i) & ".jpg" As "d:\data\" & Range("a" & i) & Range("d" & i) & ".jpg"
+Next
+End Sub
+
+
+'图表对象靠录制
+Sub test()
+Dim shp As Shape
+
+Set shp = Sheet1.Shapes.AddChart
+    shp.Chart.SetSourceData Range("b2:c14")
+    shp.Chart.ChartType = xlLine
+    shp.Chart.Axes(xlValue).MinimumScale = 1000000
+
+End Sub
+
+
+
+'完成题单自动生成调查问卷Code
+Dim i As Integer
+Dim shp, shp1
+
+For Each shp1 In Sheet2.Shapes
+    shp1.Delete
+Next
+Sheet2.Range("a1:z10000").ClearContents
+
+
+For i = 2 To 18
+    Sheet2.Range("a" & i * 6 - 11) = Sheet1.Range("a" & i)
+    
+    Set shp = Sheet2.GroupBoxes.Add(Sheet2.Range("b" & i * 6 - 10).Left, Sheet2.Range("b" & i * 6 - 10).Top, 182, 72)
+    shp.Visible = msoFalse
+    
+    
+    Sheet2.Range("b" & i * 6 - 10) = Sheet1.Range("b" & i)
+    Call test1(Sheet2.Range("b" & i * 6 - 10))
+    Sheet2.Range("b" & i * 6 - 10).ClearContents
+    Sheet2.Range("b" & i * 6 - 9) = Sheet1.Range("c" & i)
+    Call test1(Sheet2.Range("b" & i * 6 - 9))
+    Sheet2.Range("b" & i * 6 - 9).ClearContents
+    Sheet2.Range("b" & i * 6 - 8) = Sheet1.Range("d" & i)
+    Call test1(Sheet2.Range("b" & i * 6 - 8))
+    Sheet2.Range("b" & i * 6 - 8).ClearContents
+    Sheet2.Range("b" & i * 6 - 7) = Sheet1.Range("e" & i)
+    Call test1(Sheet2.Range("b" & i * 6 - 7))
+    Sheet2.Range("b" & i * 6 - 7).ClearContents
+
+Next
+
+
+End Sub
+
+
+Sub test1(rng As Range)
+Dim shp
+   Set shp = Sheet2.OptionButtons.Add(rng.Left, rng.Top, rng.Width, rng.Height)
+    shp.Characters.Text = rng
+End Sub
+
+
+Sub test2()
+
+Call test1(Sheet2.Range("b2"))
+
+
+
+End Sub
+
+
+'LIKE 运算符
+Sub test1()
+Dim i, j
+
+Range("a2:a15").Interior.Pattern = xlNone
+For i = 2 To 15
+
+If Range("a" & i) Like "[!A-Z a-z]*" Then
+
+    Range("a" & i).Interior.Color = 65535
+    k = k + 1
+    
+End If
+Next
+
+Range("f1") = k
+
+
+End Sub
+
+'类模块
+'公有与私有
+Dim i
+Public j
+
+Sub test()
+
+MsgBox "aa"
+End Sub
+
+
+Public Sub test1()
+
+MsgBox "aa"
+End Sub
+
+
+Private Sub test2()
+MsgBox "aa"
+End Sub
+
+Function qbl()
+qbl = i
+End Function
+
+'超级表格
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "SuperSheets"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Sub Sdelete(str As String)
+Dim sht As Worksheet
+    For Each sht In Sheets
+        If sht.Name = str Then
+            Application.DisplayAlerts = False
+            sht.Delete
+            Application.DisplayAlerts = True
+        End If
+    Next
+End Sub
+
+
+Sub Sadd(str As String)
+Dim sht, sht1 As Worksheet
+    For Each sht In Sheets
+        If sht.Name = str Then
+            k = k + 1
+        End If
+    Next
+    
+    If k = 0 Then
+        Set sht1 = Sheets.Add
+        sht1.Name = str
+    End If
+
+End Sub
+
+
+Sub Add()
+
+Sheets.Add after:=Sheets(Sheets.Count)
+
+

@@ -1,0 +1,146 @@
+'选取单元格的几种方式
+
+Sub test1()
+[a10] = 1
+End Sub
+Sub test2()
+Cells(10, 1) = 1
+End Sub
+Sub test3()
+Range("a10") = 1
+End Sub
+Sub test4()
+Range("a1").Offset(10, 0) = 1
+End Sub
+Sub test5()
+Range("b1") = Range("a10").Row
+End Sub
+Sub test6()
+Range("b1") = Range("a10").End(xlUp).Row
+End Sub
+Sub test7()
+Range("a10").EntireRow.Delete
+End Sub
+
+
+'将数据拆分到多表
+
+Sub 用循环拆分()
+Dim i, j As Integer
+
+For i = 2 To Sheet1.Range("a65535").End(xlUp).Row
+    j = Sheets(Sheet1.Range("d" & i).Value).Range("a65535").End(xlUp).Row + 1
+    Sheet1.Range("a" & i).EntireRow.Copy Sheets(Sheet1.Range("d" & i).Value).Range("a" & j)
+Next
+
+End Sub
+
+Sub 清空结果()
+Dim sht As Worksheet
+For Each sht In Worksheets
+    
+    If sht.Name <> "数据" Then sht.Range("a2:f10000").ClearContents
+
+Next
+
+
+End Sub
+
+
+
+Sub 用筛选拆分()
+Dim i As Integer
+Dim sht As Worksheet
+
+i = Sheet1.Range("a65535").End(xlUp).Row
+For Each sht In Worksheets
+    If sht.Name <> 数据 Then
+    
+        Sheet1.Range("a1:f" & i).AutoFilter field:=4, Criteria1:="=" & sht.Name
+        Sheet1.Range("a1:f" & i).Copy sht.Range("a1")
+    
+    End If
+Next
+
+Sheet1.Range("a1:f" & i).AutoFilter
+End Sub
+
+
+Sub shaifen()
+Dim i As Integer
+
+
+For i = 2 To Sheets.Count
+    Sheet1.Range("a1:f1048").AutoFilter Field:=4, Criteria1:=Sheets(i).Name
+    Sheet1.Range("a1:f1048").Copy Sheets(i).Range("a1")
+Next
+Sheet1.Range("a1:f1048").AutoFilter
+
+End Sub
+
+
+'with语句
+Sub 宏4()
+'
+' 宏4 宏
+'
+
+'
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .Color = 65535
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
+End Sub
+Sub 宏5()
+
+    With Cells.Interior
+        .Pattern = xlNone
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
+End Sub
+
+
+'选中单元格整行变黄
+Sub gys()
+
+Cells.Interior.Pattern = xlNone
+Selection.EntireRow.Interior.Color = 65535
+
+End Sub
+
+'自动筛选
+Sub shaixuan()
+
+Range("l1:q10000").ClearContents
+Range("A1:F232").AutoFilter Field:=4, Criteria1:=Range("i2")
+Range("A1:F232").Copy Range("l1")
+Range("A1:F232").AutoFilter
+
+End Sub
+'事件 worksheet change
+Private Sub Worksheet_Change(ByVal Target As Range)
+Application.EnableEvents = False
+Call shaixuan
+Application.EnableEvents = True
+End Sub
+
+'自动更新
+Private Sub Worksheet_Activate()
+ActiveWorkbook.RefreshAll
+End Sub
+
+'重要数据自动备份
+Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
+
+ThisWorkbook.SaveCopyAs "d:\data\" & Format(Now(), "yyyymmddhhmmss") & ".xls"
+
+End Sub
+
+'按钮 点击事件
+Private Sub CommandButton1_Click()
+MsgBox "点我干嘛"
+End Sub

@@ -1,0 +1,125 @@
+Sub gys()
+Dim shu As Integer
+
+
+For shu = 1 To 50
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .ThemeColor = xlThemeColorLight2
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
+    ActiveCell.Offset(7, 0).Range("A1").Select
+Next
+
+End Sub
+
+
+
+
+
+Sub gzt()
+
+Dim i As Integer
+
+Rows("1:1").Select
+For i = 1 To 10
+    Selection.Copy
+    ActiveCell.Offset(2, 0).Rows("1:1").EntireRow.Select
+    Selection.Insert Shift:=xlDown
+Next
+
+End Sub
+
+
+
+
+
+Sub gzb()
+Dim i As Integer
+Rows("3:3").Select
+For i = 1 To 10
+    Application.CutCopyMode = False
+    Selection.Delete Shift:=xlUp
+    ActiveCell.Offset(1, 0).Rows("1:1").EntireRow.Select
+Next
+End Sub
+
+Sub IF和for实现工资表转工资条()
+Dim i As Integer
+    For i = 3 To 30000 Step 2
+        If Range("A" & i) <> "" And Range("A" & i) <> "姓名" Then '判断Ai是否为空,内容是否为姓名
+           Rows("1:1").Select
+           Selection.Copy
+           Range("A" & i).EntireRow.Insert
+        Else
+            Exit For '退出循环
+        End If
+    Next
+    Application.CutCopyMode = False '关闭剪切复制模式
+End Sub
+
+
+Sub For循环实现工资表转换为工资条()
+    Dim i As Integer '定义变量类型
+    Rows("1:1").Select
+    For i = 1 To Range("A1").End(xlDown).Row - 2  '最后一行非空行
+        Selection.Copy
+        ActiveCell.Offset(2, 0).Rows("1:1").EntireRow.Select '激活单元格，向下2行，向右0列，选择整行
+        Selection.Insert Shift:=xlDown '插入所选，向下扩展
+    Next
+    Application.CutCopyMode = False '关闭剪切模式
+    ActiveSheet.AutoFilterMode = False '关闭自动筛选
+    Rows("1:1").Select
+End Sub
+
+
+Sub For循环实现工资条转换为工资表()
+Dim i As Integer
+ Rows("3:3").Select
+ Selection.Delete Shift:=xlUp '删除所选，向下扩展
+For i = 1 To (Range("A1").End(xlDown).Row - 2) / 2
+ ActiveCell.Offset(1, 0).Rows("1:1").EntireRow.Select
+ Selection.Delete Shift:=xlUp
+Next
+ Rows("1:1").Select '回到第一行
+Selection.AutoFilter '设置自动筛选
+End Sub
+
+
+Sub IF和for实现工资条转工资表()
+Dim i As Integer
+    For i = 30001 To 3 Step -2 '删表倒着删
+        If Range("A" & i) <> "" And Range("A" & i) = "姓名" Then '判断Ai是否为空，内容是否为姓名
+             Range("A" & i).EntireRow.Select
+             Selection.Delete Shift:=xlUp
+        Else
+        End If
+    Next
+    Application.CutCopyMode = False '关闭剪切复制模式
+End Sub
+
+
+Private Sub CommandButton1_Click()
+Dim i As Integer
+ Rows("1:1").Select
+For i = 1 To Range("A1").End(xlDown).Row - 2
+ Selection.Copy
+ ActiveCell.Offset(2, 0).Rows("1:1").EntireRow.Select
+ Selection.Insert Shift:=xlDown
+Next
+ Selection.AutoFilter
+End Sub
+
+
+Private Sub CommandButton1_Click()
+Dim i As Integer
+ Rows("1:1").Select
+For i = 1 To Range("A1").End(xlDown).Row - 2
+ Selection.Copy
+ ActiveCell.Offset(2, 0).Rows("1:1").EntireRow.Select
+ Selection.Insert Shift:=xlDown
+Next
+ Selection.AutoFilter
+End Sub

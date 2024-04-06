@@ -1,0 +1,17 @@
+Option Explicit
+
+Sub demo()
+
+    Dim r As Range, i As Long, a()
+    
+    a = Array(3, 5, 2, 6)
+    
+    Set r = Range("a3:f10")
+
+    For i = 3 To 0 Step -1
+    
+        r.Sort key1:=Cells(1, a(i)), order1:=xlDescending
+    
+    Next i
+                         
+End Sub

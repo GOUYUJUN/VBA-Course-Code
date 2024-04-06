@@ -1,0 +1,113 @@
+'按钮控件  属性
+Sub test1()
+
+Sheet1.CommandButton1.Caption = "结束"
+
+End Sub
+
+
+Sub test2()
+
+Sheet1.CommandButton1.Enabled = False
+
+End Sub
+
+Sub test3()
+
+Sheet1.CommandButton1.Visible = False
+
+End Sub
+
+
+Sub test4()
+
+Sheet1.CommandButton1.Top = Sheet1.CommandButton1.Top + Sheet1.CommandButton1.Height
+
+End Sub
+
+'标签控件  属性
+
+Sub test1()
+
+Sheet1.Label1.Caption = "ABCD"
+
+End Sub
+
+Sub test2()
+
+Sheet1.Label1.Visible = False
+
+End Sub
+
+
+'单选按钮控件
+
+Sub test()
+
+If Sheet1.OptionButton1.Value = True Then
+    MsgBox "男性"
+ElseIf Sheet1.OptionButton2.Value = False Then
+    MsgBox "女性"
+Else
+    MsgBox "未选择性别"
+End If
+
+
+End Sub
+
+
+'微调按钮控件 属性
+Sub test()
+Sheet1.SpinButton1.Min = 1
+Sheet1.SpinButton1.Max = 10
+End Sub
+
+Sub test1()
+Range("a1") = Sheet1.SpinButton1.Value
+End Sub
+
+'综合练习 
+
+Sub xieru()
+Dim i As Integer '题号
+
+i = Sheet2.SpinButton1.Value
+
+'写入数据
+
+With Sheet2
+    '清空单选按钮
+    .OptionButton1.Value = False
+    .OptionButton2.Value = False
+    .OptionButton3.Value = False
+    .OptionButton4.Value = False
+    '写入题目
+    .Label2.Caption = i
+    .Label3 = Sheet3.Range("a" & i + 1)
+    .Label4 = Sheet3.Range("b" & i + 1)
+    .Label5 = Sheet3.Range("c" & i + 1)
+    .Label6 = Sheet3.Range("d" & i + 1)
+    .Label7 = Sheet3.Range("e" & i + 1)
+    '查看是否有CD两个选项
+    If .Label6.Caption = "" Then
+       .OptionButton3.Visible = False
+    Else
+        .OptionButton3.Visible = True
+    End If
+    
+    If .Label7.Caption = "" Then
+       .OptionButton4.Visible = False
+    Else
+        .OptionButton4.Visible = True
+    End If
+    '返回之前的答案
+    If Sheet3.Range("g" & i + 1) = "A" Then
+        .OptionButton1.Value = True
+    ElseIf Sheet3.Range("g" & i + 1) = "B" Then
+        .OptionButton2.Value = True
+    ElseIf Sheet3.Range("g" & i + 1) = "C" Then
+        .OptionButton3.Value = True
+    ElseIf Sheet3.Range("g" & i + 1) = "D" Then
+        .OptionButton4.Value = True
+    End If
+    

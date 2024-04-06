@@ -1,0 +1,29 @@
+Option Explicit
+
+
+Sub sortByAveGDP()
+
+    Dim i As Long, j As Long, k, r As Range
+    
+    For i = 3 To 14
+        
+        If Not Cells(i, 2).MergeCells Then  '如果第i行为合并单元格，则不处理
+            For j = i + 1 To 15
+            
+                If Not Cells(j, 2).MergeCells Then '如果第j行为合并单元格，则不处理
+                    If Cells(j, 3) > Cells(i, 3) Then
+                        
+                        '以下代码交换i行和j行的三列数据，也可以使用循环结构对其简化
+                        k = Cells(i, 2): Cells(i, 2) = Cells(j, 2): Cells(j, 2) = k
+                        k = Cells(i, 3): Cells(i, 3) = Cells(j, 3): Cells(j, 3) = k
+                        k = Cells(i, 4): Cells(i, 4) = Cells(j, 4): Cells(j, 4) = k
+                    
+                    End If
+                End If
+            
+            Next j
+        End If
+        
+    Next i
+
+End Sub

@@ -1,0 +1,30 @@
+Option Explicit
+
+Sub answer3()
+
+    Dim a(), d As Object, k
+    Dim wReport As Worksheet, w As Worksheet
+    
+    Set wReport = Worksheets("出席统计")
+    Set d = CreateObject("scripting.dictionary")
+    
+    For Each w In Worksheets
+    
+        If w.name <> "出席统计" Then
+        
+            a = w.UsedRange
+            For Each k In a
+                k = Trim(Left(k, 1))
+                d(k) = d(k) + 1
+            Next k
+        End If
+    
+    Next w
+    
+    a = Application.Transpose(d.keys)
+    wReport.Range("A2:A" & UBound(a) + 1) = a
+    
+    a = Application.Transpose(d.items)
+    wReport.Range("B2:B" & UBound(a) + 1) = a
+    
+End Sub

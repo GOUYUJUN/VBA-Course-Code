@@ -1,0 +1,75 @@
+'计算
+Option Explicit
+
+Sub demo()
+
+    Dim i As Long, r As Range
+    
+    For i = 3 To 14
+    
+        Set r = Cells(i, 5).MergeArea
+    
+        Cells(i, 6) = Cells(i, 4) * r.Cells(1, 1).Value
+    
+    Next i
+
+End Sub
+
+
+
+'染色
+Option Explicit
+
+Sub colorDemo()
+
+    Dim i, j, iRows, jRows, r As Range
+    Dim a()
+    
+    a = Array(vbRed, vbBlue, vbGreen)
+    
+    i = 3: j = 0
+    
+    Do While i <= 14
+    
+        Cells(i, 2).MergeArea.Resize(columnsize:=3).Interior.Color = a(j Mod 3)
+        
+        j = j + 1
+        
+        i = i + Cells(i, 2).MergeArea.Rows.Count
+        
+    Loop
+
+End Sub
+
+'排序
+Option Explicit
+
+Sub orderDemo()
+    Dim i&, j&, iRows&, jRows&
+        
+    '以下使用选择排序法思想对表格进行排序
+    i = 2
+    Do While i <= 13
+    
+        '让 j 从i的下一个公司（即下一个合并区域的首行）开始循环
+        j = i + Cells(i, 1).MergeArea.Rows.Count
+        Do While j <= 13
+             
+            '获得当前i、j两个公司的合并区域总行数
+            iRows = Cells(i, 1).MergeArea.Rows.Count
+            jRows = Cells(j, 1).MergeArea.Rows.Count
+            
+            '如果j公司最后一行第3列(即合计)大于i公司，则将j剪切到i前面
+            If Cells(j + jRows - 2, 3) > Cells(i + iRows - 2, 3) Then
+                Cells(j, 1).Resize(jRows, 4).Cut
+                Cells(i, 1).Insert Shift:=xlDown
+            End If
+            
+            '让j的增加值为当前合并区域的总行数，从而直接跳到下一个公司上
+            j = j + jRows
+        Loop
+        
+         '让i的增加值为当前合并区域的总行数，从而直接跳到下一个公司上
+        i = i + Cells(i, 1).MergeArea.Rows.Count
+    Loop
+End Sub
